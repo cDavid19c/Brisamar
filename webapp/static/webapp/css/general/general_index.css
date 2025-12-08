@@ -1,0 +1,287 @@
+/* ==============================================
+   AllpaHouseNYC Design System
+   Elegant Beige & White Palette
+   ============================================== */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Variables de Diseño */
+:root {
+    /* Colores Elegantes - Beige y Blanco */
+    --color-beige-claro: #F5F1E8;
+    --color-beige: #E8DCC4;
+    --color-beige-oscuro: #D4C4A8;
+    --color-marron-calido: #8B7355;
+    --color-marron-oscuro: #6B5842;
+    --color-carbon: #2A2926;
+
+    /* Texto */
+    --texto-principal: #2A2926;
+    --texto-secundario: #6B5842;
+    --texto-claro: #ffffff;
+
+    /* Tipografía */
+    --heading-font: 'Playfair Display', serif;
+    --body-font: 'Inter', sans-serif;
+
+    /* Gradientes */
+    --degradado-principal: linear-gradient(135deg, #8B7355 0%, #6B5842 100%);
+    --degradado-suave: linear-gradient(135deg, #F5F1E8 0%, #E8DCC4 100%);
+}
+
+/* Reset y Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--body-font);
+    color: var(--texto-principal);
+    background-color: #ffffff;
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--heading-font);
+    font-weight: 600;
+    color: var(--color-carbon);
+}
+
+/* ===========================
+   NAVEGACIÓN
+   =========================== */
+
+.cabezal_general {
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(232, 220, 196, 0.3);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.menu_cabezal_general {
+    padding: 1rem 0;
+}
+
+.logo_cabezal_general {
+    font-family: var(--heading-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--color-marron-calido) !important;
+    transition: all 0.3s ease;
+}
+
+.logo_cabezal_general:hover {
+    color: var(--color-marron-oscuro) !important;
+}
+
+/* Enlaces del menú */
+.navbar-nav .nav-link {
+    color: var(--texto-principal);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--color-marron-calido);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--color-marron-calido);
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 60%;
+}
+
+/* Botón principal en nav */
+.navbar .btn-primary {
+    background: var(--color-marron-calido);
+    border: none;
+    border-radius: 30px;
+    padding: 0.6rem 1.8rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(139, 115, 85, 0.25);
+}
+
+.navbar .btn-primary:hover {
+    background: var(--color-marron-oscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(139, 115, 85, 0.35);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--color-beige-claro);
+    color: var(--color-marron-calido);
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+
+.footer-modern {
+    background: var(--degradado-principal);
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.1);
+}
+
+.footer-modern h4 {
+    font-family: var(--heading-font);
+    color: var(--texto-claro);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.footer-modern p,
+.footer-modern a {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-links {
+    margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.footer-social a {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 0 0.5rem;
+}
+
+.footer-social a:hover {
+    color: #ffffff;
+    transform: translateY(-4px) scale(1.1);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* ===========================
+   COMPONENTES GLOBALES
+   =========================== */
+
+/* Botones */
+.btn {
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-weight: 600;
+    font-family: var(--body-font);
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--color-marron-calido);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--color-marron-oscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(139, 115, 85, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--color-marron-calido);
+    color: var(--color-marron-calido);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: var(--color-marron-calido);
+    color: white;
+    border-color: var(--color-marron-calido);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Backgrounds */
+.light-background {
+    background: var(--degradado-suave);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .navbar-nav .nav-link::after {
+        display: none;
+    }
+
+    .logo_cabezal_general {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-modern {
+        padding: 2rem 0 1rem;
+    }
+}

@@ -1,0 +1,576 @@
+{% extends "cabezal.html" %}
+{% load static %}
+{% block css_archivos %}
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    :root {
+        --color-principal: #8B7355;
+        --color-secundario: #6B5842;
+        --color-accent: #8B7355;
+        --degradado: linear-gradient(135deg, #6B5842 0%, #8B7355 100%);
+    }
+
+    .galeria-section {
+        padding: 2rem 0;
+    }
+
+    .main-image img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 1rem;
+    }
+
+    .thumbs img {
+        width: 140px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: 0.3s;
+    }
+
+    .thumbs img:hover,
+    .thumbs img.active-thumb {
+        border-color: var(--color-principal);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+    }
+
+    .sticky-top {
+        position: sticky;
+    }
+
+    .card label {
+        font-size: 0.9rem;
+    }
+
+    .picker-wrapper input {
+        cursor: pointer;
+    }
+
+    footer {
+        background: var(--degradado);
+    }
+</style>
+<style>
+    .modal-content {
+        border-radius: 1.2rem !important;
+    }
+
+    .modal-summary li {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.4rem 0;
+        font-size: 1rem;
+    }
+
+    .modal-summary span {
+        color: #444;
+    }
+
+    .input-soft {
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+        border: 1px solid #e1e1e1;
+        padding: 0.9rem 1rem;
+        font-size: 1rem;
+        transition: .2s ease-in-out;
+    }
+
+    .input-soft:focus {
+        background: #fff;
+        border-color: #C85A3A;
+        box-shadow: 0 0 0 0.2rem rgba(200, 90, 58, .15);
+    }
+
+    .modal-header h4 {
+        font-size: 1.4rem;
+    }
+
+    .modal-footer button {
+        font-size: 1rem;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'webapp/css/modals.css' %}">
+{% endblock %}
+{% block contenido_pagina %}
+<!-- GALERÍA -->
+<section class="galeria-section">
+    <div class="container">
+
+        <div class="main-image mb-3">
+            <img id="imagen-principal" src="{{ imagen_principal }}" class="img-fluid shadow">
+        </div>
+
+        <div class="thumbs d-flex gap-3">
+            {% for img in imagenes %}
+            <img onclick="cambiarImagen(this)" src="{{ img }}"
+                class="thumb-img {% if forloop.first %}active-thumb{% endif %}">
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<!-- DETALLE DE HABITACIÓN -->
+<section class="detalle-section py-5">
+    <div class="container">
+
+        <div class="row">
+
+            <!-- IZQUIERDA -->
+            <div class="col-lg-8">
+
+                <h2 class="fw-bold">{{ nombre }}</h2>
+                <p class="text-muted fs-5">
+                    {{ hotel }} · {{ ubicacion }} · {{ pais }}
+                </p>
+
+                <div class="d-flex gap-2 flex-wrap mb-3">
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+                        <i class="bi bi-people"></i> Capacidad: {{ capacidad }}
+                    </span>
+
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+                        <i class="bi bi-door-closed"></i> Tipo: {{ tipo }}
+                    </span>
+                </div>
+
+                <p class="lead">
+                    Esta habitación moderna combina elegancia y confort para asegurar una experiencia única,
+                    con espacios amplios, mobiliario ergonómico y servicios de alta calidad.
+                </p>
+
+                <h4 class="mt-4 fw-bold">Características / Amenidades</h4>
+
+                <ul class="list-group my-3 shadow-sm">
+                    {% if amenidades %}
+                    {% for a in amenidades %}
+                    <li class="list-group-item">
+                        <i class="bi bi-check-circle text-primary me-2"></i> {{ a }}
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <li class="list-group-item text-muted">
+                        No hay amenidades registradas para esta habitación.
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+
+            <!-- DERECHA - TARJETA -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-lg border-0 p-4 rounded-4 sticky-top" style="top: 100px;">
+
+                    <h4 class="fw-bold mb-3 text-primary">Precio por noche</h4>
+                    <p class="fw-bold fs-2 text-primary">
+                        ${{ precio|floatformat:2 }}
+                    </p>
+
+                    <form>
+
+                        <label class="fw-semibold mb-1">Rango de fechas</label>
+                        <div class="picker-wrapper mb-4">
+                            <input id="rango-fechas" type="text" class="form-control" placeholder="Selecciona fechas"
+                                readonly>
+                        </div>
+
+                        <label class="fw-semibold mb-1">Huéspedes</label>
+                        <select id="huespedes" class="form-select mb-4"></select>
+
+
+                        <button type="button" id="btn-reserva"
+                            class="btn btn-primary w-100 rounded-pill fw-semibold py-2">
+                        </button>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- MODAL DE RESERVA -->
+<div class="modal fade" id="modalReserva" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-lg border-0 rounded-4">
+
+            <div class="modal-header border-0 pb-0">
+                <h4 class="modal-title fw-bold">Confirmar Reserva</h4>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="mb-4">
+                    <h6 class="fw-bold text-secondary">Resumen de la reserva</h6>
+
+                    <ul class="list-unstyled mt-3 modal-summary">
+                        <li>
+                            <span>Habitación:</span>
+                            <strong>{{ nombre }}</strong>
+                        </li>
+                        <li>
+                            <span>Fechas:</span>
+                            <strong id="resumen-fechas">No seleccionado</strong>
+                        </li>
+                        <li>
+                            <span>Huéspedes:</span>
+                            <strong id="resumen-huespedes">1 huésped</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <hr class="my-4">
+
+                <h6 class="fw-bold text-secondary mb-3">Datos del cliente</h6>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <input type="text" class="form-control form-control-lg input-soft" placeholder="Nombre completo"
+                            disabled>
+                    </div>
+                    <div class="col-12">
+                        <input type="email" class="form-control form-control-lg input-soft"
+                            placeholder="Correo electrónico" disabled>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-light px-4 py-2 rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                <button id="btn-confirmar-reserva" class="btn btn-primary px-4 py-2 rounded-pill fw-semibold">PRE
+                    RESERVA
+                </button>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block jvscript_archivos_defer %}
+<script src="{% static 'webapp/js/modals.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+
+<script>
+    function cambiarImagen(el) {
+        document.getElementById("imagen-principal").src = el.src;
+        document.querySelectorAll(".thumb-img").forEach(img =>
+            img.classList.remove("active-thumb")
+        );
+        el.classList.add("active-thumb");
+    }
+
+    // ==============================
+    //   PICKER DE FECHAS
+    // ==============================
+    const habitacionId = "{{ id }}";
+    let fechasOcupadas = [];
+
+    // Cargar fechas ocupadas
+    fetch(`/api/fechas-ocupadas/${habitacionId}/`)
+        .then(r => {
+            if (!r.ok) {
+                throw new Error(`HTTP error! status: ${r.status}`);
+            }
+            return r.json();
+        })
+        .then(data => {
+            if (data.success) {
+                fechasOcupadas = data.fechas_ocupadas || [];
+                console.log(`Fechas ocupadas cargadas para habitación ${habitacionId}:`, fechasOcupadas.length, "fechas");
+                if (fechasOcupadas.length > 0) {
+                    console.log("Primeras 5 fechas ocupadas:", fechasOcupadas.slice(0, 5));
+                }
+                inicializarCalendario();
+            } else {
+                console.error("Error al cargar fechas ocupadas:", data.error);
+                inicializarCalendario(); // Inicializar sin bloqueos si falla
+            }
+        })
+        .catch(err => {
+            console.error("Error al obtener fechas ocupadas:", err);
+            inicializarCalendario(); // Inicializar sin bloqueos si falla
+        });
+
+    function inicializarCalendario() {
+        // Convertir fechas ocupadas a objetos Date
+        const fechasBloqueadas = fechasOcupadas.map(fecha => {
+            // Convertir formato ISO (YYYY-MM-DD) a Date
+            const [year, month, day] = fecha.split('-');
+            const fechaDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            // Ajustar a medianoche para evitar problemas de zona horaria
+            fechaDate.setHours(0, 0, 0, 0);
+            return fechaDate;
+        });
+
+        console.log("Fechas ocupadas recibidas:", fechasOcupadas);
+        console.log("Fechas bloqueadas (Date objects):", fechasBloqueadas);
+
+        const picker = new Litepicker({
+            element: document.getElementById('rango-fechas'),
+            singleMode: false,
+            numberOfMonths: 2,
+            numberOfColumns: 2,
+            minDate: new Date(),
+            autoApply: true,
+            lang: 'es',
+            format: 'DD/MM/YYYY',
+            tooltipText: { one: 'noche', other: 'noches' },
+            lockDays: fechasBloqueadas,
+            disallowLockDaysInRange: true, // Bloquear rangos que incluyan días bloqueados
+            setup: (picker) => {
+                picker.on('beforeShow', (picker) => {
+                    // Asegurar que los días bloqueados se muestren correctamente
+                    const lockedDays = picker.options.lockDays || [];
+                    console.log("Días bloqueados en el picker:", lockedDays.length);
+
+                    // Aplicar estilos a los días bloqueados
+                    setTimeout(() => {
+                        fechasBloqueadas.forEach(fechaBloqueada => {
+                            const dayElements = picker.calendars[0]?.days || [];
+                            dayElements.forEach(dayEl => {
+                                if (dayEl && dayEl.dataset && dayEl.dataset.time) {
+                                    const dayTime = parseInt(dayEl.dataset.time);
+                                    const dayDate = new Date(dayTime);
+                                    dayDate.setHours(0, 0, 0, 0);
+
+                                    if (dayDate.getTime() === fechaBloqueada.getTime()) {
+                                        dayEl.classList.add('is-locked');
+                                        dayEl.style.opacity = '0.5';
+                                        dayEl.style.cursor = 'not-allowed';
+                                        dayEl.title = 'Fecha ocupada';
+                                    }
+                                }
+                            });
+                        });
+                    }, 100);
+                });
+
+                picker.on('selected', (date1, date2) => {
+                    if (date1 && date2) {
+                        // Validar que el rango seleccionado no incluya días bloqueados
+                        const inicio = new Date(date1);
+                        const fin = new Date(date2);
+                        inicio.setHours(0, 0, 0, 0);
+                        fin.setHours(0, 0, 0, 0);
+
+                        let tieneDiaBloqueado = false;
+                        let fechaBloqueadaEncontrada = null;
+
+                        for (let d = new Date(inicio); d <= fin; d.setDate(d.getDate() + 1)) {
+                            const fechaStr = d.toISOString().split('T')[0];
+                            if (fechasOcupadas.includes(fechaStr)) {
+                                tieneDiaBloqueado = true;
+                                fechaBloqueadaEncontrada = fechaStr;
+                                break;
+                            }
+                        }
+
+                        if (tieneDiaBloqueado) {
+                            showAlert("📅 Fechas No Disponibles", `Las fechas seleccionadas incluyen días que ya están ocupados (${fechaBloqueadaEncontrada}). Por favor, selecciona otras fechas.`, "warning");
+                            picker.clearSelection();
+                            document.getElementById('rango-fechas').value = '';
+                            return false;
+                        }
+                    }
+                });
+            }
+        });
+
+        // Guardar referencia global para uso posterior
+        window.picker = picker;
+    }
+</script>
+
+<script>
+    // =======================================================
+    //   AUTOCOMPLETAR DATOS DEL USUARIO EN EL MODAL
+    // =======================================================
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const modal = document.getElementById("modalReserva");
+
+        modal.addEventListener("show.bs.modal", () => {
+
+            // Resumen del rango de fechas
+            const fechas = document.getElementById("rango-fechas").value.trim();
+            document.getElementById("resumen-fechas").textContent =
+                fechas !== "" ? fechas : "No seleccionado";
+
+            // Resumen de huéspedes
+            const huespedes = document.getElementById("huespedes").value;
+            document.getElementById("resumen-huespedes").textContent = huespedes;
+
+            // AUTOCOMPLETAR
+            const inputNombre = document.querySelector('#modalReserva input[placeholder="Nombre completo"]');
+            const inputCorreo = document.querySelector('#modalReserva input[placeholder="Correo electrónico"]');
+            const inputTelefono = document.querySelector('#modalReserva input[placeholder="Teléfono"]');
+
+            const usuarioId = localStorage.getItem("usuario_id");
+
+            if (usuarioId) {
+                inputNombre.value = `${localStorage.getItem("usuario_nombre") || ""} ${localStorage.getItem("usuario_apellido") || ""}`.trim();
+                inputCorreo.value = localStorage.getItem("usuario_correo") || "";
+                inputTelefono.value = localStorage.getItem("usuario_telefono") || "";
+            }
+        });
+
+    });
+</script>
+
+<script>
+    // =======================================================
+    //     VALIDAR "RESERVAR AHORA" → FECHAS OBLIGATORIAS
+    // =======================================================
+    document.addEventListener("DOMContentLoaded", function () {
+        const usuarioId = localStorage.getItem("usuario_id");
+        const btn = document.getElementById("btn-reserva");
+        const inputFechas = document.getElementById("rango-fechas");
+
+        if (!usuarioId) {
+            // Usuario NO logueado
+            btn.textContent = "Iniciar sesión";
+            btn.classList.add("btn-outline-primary");
+            btn.classList.remove("btn-primary");
+
+            btn.addEventListener("click", () => {
+                window.location.href = "/login/";
+            });
+
+        } else {
+            // Usuario logueado
+            btn.textContent = "Continuar con reserva";
+            btn.classList.add("btn-primary");
+            btn.classList.remove("btn-outline-primary");
+
+            btn.addEventListener("click", () => {
+
+                // VALIDACIÓN OBLIGATORIA
+                if (!inputFechas.value.trim()) {
+                    showAlert("📅 Fechas Requeridas", "Por favor selecciona un rango de fechas antes de continuar.", "warning");
+                    return;
+                }
+
+                // Abrir modal manualmente (para evitar problemas con validación)
+                const modal = new bootstrap.Modal(document.getElementById("modalReserva"));
+                modal.show();
+            });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const capacidadHabitacion = parseInt("{{ capacidad|default:1 }}", 10) || 1;
+        const select = document.getElementById("huespedes");
+
+        if (!select) return;
+
+        select.innerHTML = "";
+
+        for (let i = 1; i <= capacidadHabitacion; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = `${i} huésped${i > 1 ? "es" : ""}`;
+            select.appendChild(option);
+        }
+    });
+</script>
+
+
+<script>
+    // =======================================================
+    //   CONFIRMAR RESERVA
+    // =======================================================
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const btn = document.getElementById("btn-confirmar-reserva");
+
+        btn.addEventListener("click", function () {
+            // 1. Protección contra doble clic
+            if (this.disabled) return;
+            this.disabled = true;
+            const textoOriginal = this.innerHTML;
+            this.innerHTML = '<i class="bi bi-hourglass-split"></i> Procesando...';
+
+            const usuarioId = localStorage.getItem("usuario_id");
+            if (!usuarioId) {
+                showAlert("❌ Error de Sesión", "Debes iniciar sesión para hacer una pre-reserva.", "error", () => {
+                    this.disabled = false;
+                    this.innerHTML = textoOriginal;
+                });
+                return;
+            }
+
+            const fechas = document.getElementById("rango-fechas").value.trim();
+            if (!fechas) {
+                showAlert("❌ Fechas Requeridas", "Por favor, selecciona un rango de fechas antes de continuar.", "error", () => {
+                    this.disabled = false;
+                    this.innerHTML = textoOriginal;
+                });
+                return;
+            }
+
+            const [inicioRaw, finRaw] = fechas.split(" - ");
+            const fechaInicio = inicioRaw.split("/").reverse().join("-") + "T15:00:00";
+            const fechaFin = finRaw.split("/").reverse().join("-") + "T11:00:00";
+
+            const huespedes = document.getElementById("huespedes").value;
+
+            // 2. Confirmación mejorada con ventana emergente bonita
+            showConfirm(
+                "📅 Confirmar Pre-Reserva",
+                `¿Deseas pre-reservar esta habitación?\n\n📍 Fecha inicio: ${inicioRaw}\n📍 Fecha fin: ${finRaw}\n👥 Huéspedes: ${huespedes}`,
+                () => {
+                    // Usuario confirmó
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "/usuario/prereserva/";
+
+                    form.innerHTML = `
+                {% csrf_token %}
+                <input type="hidden" name="usuarioId" value="${usuarioId}">
+                <input type="hidden" name="idHabitacion" value="{{ id }}">
+                <input type="hidden" name="fechaInicio" value="${fechaInicio}">
+                <input type="hidden" name="fechaFin" value="${fechaFin}">
+                <input type="hidden" name="numeroHuespedes" value="${huespedes}">
+                <input type="hidden" name="nombre" value="${localStorage.getItem("usuario_nombre")}">
+                <input type="hidden" name="apellido" value="${localStorage.getItem("usuario_apellido")}">
+                <input type="hidden" name="correo" value="${localStorage.getItem("usuario_correo")}">
+                <input type="hidden" name="tipoDocumento" value="${localStorage.getItem("usuario_tipo_doc")}">
+                <input type="hidden" name="documento" value="${localStorage.getItem("usuario_documento")}">
+                <input type="hidden" name="telefono" value="${localStorage.getItem("usuario_telefono") || ''}">
+                <input type="hidden" name="precioActual" value="{{ precio }}">
+            `;
+
+                    document.body.appendChild(form);
+                    form.submit();
+                },
+                () => {
+                    // Usuario canceló
+                    this.disabled = false;
+                    this.innerHTML = textoOriginal;
+                }
+            );
+        });
+
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "cabezal.html" %}
+{% load static %}
+
+{% block titulo_pagina %}
+<title>Inicio | AllpaHouseNYC - Manhattan, Nueva York</title>
+{% endblock %}
+
+{% block css_archivos %}
+<link rel="stylesheet" href="{% static 'webapp/css/inicio/inicio_index.css' %}">
+{% endblock %}
+
+{% block contenido_pagina %}
+<!-- ========================= -->
+<!-- HERO / PORTADA PRINCIPAL -->
+<!-- ========================= -->
+<header class="hero-section text-white d-flex align-items-center">
+    <div class="container text-start hero-content">
+        <h1 class="fw-bold mb-4">
+            AllpaHouseNYC
+        </h1>
+        <p class="lead mb-3">
+            Hospitalidad E
+
+            cuatoriana en el Corazón de Nueva York
+        </p>
+        <p class="mb-5" style="max-width: 650px;">
+            Experimenta la calidez de la hospitalidad andina en el corazón de Manhattan. Donde el servicio tradicional
+            se encuentra con el lujo contemporáneo, a pasos de Central Park.
+        </p>
+        <div class="hero-buttons mt-4">
+            <a href="{% url 'habitaciones' %}"
+                class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-semibold shadow-lg">
+                <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
+            </a>
+            <a href="{% url 'habitaciones' %}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-semibold">
+                Ver Habitaciones
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- ========================= -->
+<!-- SECCIÓN SOBRE NOSOTROS -->
+<!-- ========================= -->
+<section class="py-5 light-background">
+    <div class="container text-center">
+        <div class="mb-5">
+            <span class="section-label">DESCUBRE</span>
+            <h2 class="mb-4 mt-2">
+                La Experiencia AllpaHouseNYC
+            </h2>
+        </div>
+        <p class="lead mb-5">
+            En el corazón de <strong style="color: var(--color-marino);">Manhattan</strong>, AllpaHouseNYC reúne
+            la sofisticación neoyorquina con la <strong style="color: var(--color-dorado);">calidez
+                ecuatoriana</strong>.
+            A solo pasos de Central Park y las mejores atracciones de la ciudad, experimenta un hotel boutique
+            donde la hospitalidad andina se encuentra con la elegancia metropolitana.
+        </p>
+
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=800&q=80"
+                        class="img-fluid rounded-3 shadow-sm mb-3" alt="Central Park Manhattan"
+                        style="height: 280px; width: 100%; object-fit: cover;" loading="lazy">
+                    <div class="px-2">
+                        <h5 class="mt-3 mb-2">
+                            <i class="bi bi-geo-alt me-2"></i>Ubicación Premium en Manhattan
+                        </h5>
+                        <p>
+                            A pasos de Central Park, las tiendas de la Quinta Avenida y los teatros de Broadway.
+                            Experimenta lo mejor de Nueva York desde nuestra puerta.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80"
+                        class="img-fluid rounded-3 shadow-sm mb-3" alt="Boutique Hotel Suite"
+                        style="height: 280px; width: 100%; object-fit: cover;">
+                    <div class="px-2">
+                        <h5 class="mt-3 mb-2">
+                            <i class="bi bi-building me-2"></i>Elegancia Boutique
+                        </h5>
+                        <p>
+                            Habitaciones cuidadosamente diseñadas que combinan el estilo moderno de NYC con
+                            toques cálidos y artesanales inspirados en la artesanía ecuatoriana.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80"
+                        class="img-fluid rounded-3 shadow-sm mb-3" alt="Personalized Service"
+                        style="height: 280px; width: 100%; object-fit: cover;">
+                    <div class="px-2">
+                        <h5 class="mt-3 mb-2">
+                            <i class="bi bi-heart me-2"></i>Hospitalidad Andina
+                        </h5>
+                        <p>
+                            Experimenta la auténtica calidez y el servicio personalizado arraigado en
+                            las tradiciones ecuatorianas de recibir a los huéspedes como familia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- SECCIÓN SERVICIOS -->
+<!-- ========================= -->
+<section class="py-5" style="background-color: #ffffff;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">COMODIDADES</span>
+            <h2 class="mb-3 mt-2">
+                Servicios Premium
+            </h2>
+            <p class="text-muted" style="max-width: 700px; margin: 0 auto;">
+                Todo lo que necesitas para una estadía excepcional en Manhattan
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4 hover-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-wifi display-4"></i>
+                        </div>
+                        <h5 class="mt-3 mb-2">
+                            WiFi de Alta Velocidad
+                        </h5>
+                        <p class="text-muted small mb-0">Mantente conectado con internet de cortesía de alta velocidad
+                            en todo el hotel.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4 hover-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-cup-hot display-4"></i>
+                        </div>
+                        <h5 class="mt-3 mb-2">
+                            Desayuno Incluido
+                        </h5>
+                        <p class="text-muted small mb-0">Comienza tu día con nuestro desayuno gourmet con sabores
+                            internacionales y ecuatorianos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4 hover-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-building display-4"></i>
+                        </div>
+                        <h5 class="mt-3 mb-2">
+                            Servicio de Conserjería
+                        </h5>
+                        <p class="text-muted small mb-0">Orientación experta local para ayudarte a descubrir lo mejor de
+                            Nueva York.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="card h-100 border-0 shadow-sm p-4 hover-card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-shield-check display-4"></i>
+                        </div>
+                        <h5 class="mt-3 mb-2">
+                            Seguridad 24/7
+                        </h5>
+                        <p class="text-muted small mb-0">Siéntete seguro con nuestro equipo de seguridad disponible las
+                            24 horas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- SECCIÓN HABITACIONES -->
+<!-- ========================= -->
+<section class="py-5 light-background">
+    <div class="container text-center">
+        <div class="mb-5">
+            <span class="section-label">ALOJAMIENTO</span>
+            <h2 class="mb-3 mt-2">
+                Nuestras Habitaciones y Suites
+            </h2>
+            <p class="lead text-muted" style="max-width: 700px; margin: 0 auto;">
+                Estilo moderno de Manhattan con calidez ecuatoriana
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80"
+                        class="card-img-top" alt="Manhattan View Room" style="height: 240px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5>Habitación Vista Manhattan</h5>
+                        <p class="text-muted">Diseño contemporáneo con impresionantes vistas de la ciudad. Cama queen,
+                            baño privado y amenidades premium.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80"
+                        class="card-img-top" alt="Central Park Suite" style="height: 240px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5>Suite Vista Central Park</h5>
+                        <p class="text-muted">Suite espaciosa con vistas al parque. Sala de estar separada, cama king y
+                            lujoso baño con tina.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80"
+                        class="card-img-top" alt="Allpa Signature Suite" style="height: 240px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5>Suite Signature Allpa</h5>
+                        <p class="text-muted">Nuestro mejor alojamiento con detalles artesanales ecuatorianos, vistas
+                            panorámicas de NYC y amenidades premium.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,662 @@
+{% extends "cabezal.html" %}
+{% load static %}
+{% load pdf_tokens %}
+
+{% block titulo_pagina %}
+<title>Mis Pagos | Hotel AureaCuen - Cuenca</title>
+{% endblock %}
+
+{% block css_archivos %}
+<style>
+    :root {
+        --color-principal: #2f5d50;
+        --color-secundario: #436e62;
+        --color-accent: #2f5d50;
+        --degradado: linear-gradient(135deg, #436e62 0%, #2f5d50 100%);
+    }
+
+    body {
+        background: #f5f7fb;
+    }
+
+    .pago-card {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: .2s;
+    }
+
+    .pago-card:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-3px);
+    }
+
+    .badge-estado {
+        font-size: 0.85rem;
+        padding: .45rem .8rem;
+        border-radius: .75rem;
+    }
+
+    .small-label {
+        font-size: 0.85rem;
+    }
+
+    .pdf-link {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: var(--color-principal);
+        color: white;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .pdf-link:hover {
+        background-color: color-mix(in srgb, var(--color-accent), black 10%);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+
+    .form-control:not([readonly]) {
+        background-color: #fff;
+        cursor: text;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'webapp/css/modals.css' %}">
+{% endblock %}
+
+{% block contenido_pagina %}
+
+<section class="container py-5">
+
+    <h2 class="fw-bold mb-4">Mis Pagos</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if pagos|length == 0 %}
+    <div class="alert alert-info">No tienes pagos registrados.</div>
+    {% endif %}
+
+    <div class="row g-4">
+
+        {% for p in pagos %}
+        <div class="col-md-6">
+            <div class="pago-card shadow-sm">
+
+                <!-- Encabezado -->
+                <h5 class="fw-bold mb-1">
+                    Pago #{{ p.id }}
+                </h5>
+
+                <!-- Factura -->
+                <p class="text-muted mb-1">
+                    <i class="bi bi-receipt"></i>
+                    Factura: {{ p.factura_id }}
+                </p>
+
+                <!-- Monto -->
+                <p class="mb-1"><strong>Monto:</strong> ${{ p.monto }}</p>
+
+                <!-- Fecha -->
+                <p class="mb-1"><strong>Fecha:</strong> {{ p.fecha }}</p>
+
+                <!-- Método -->
+                <p class="mb-1"><strong>Método Pago ID:</strong> {{ p.metodo }}</p>
+
+                <!-- Cuentas -->
+                <p class="small-label text-muted mb-1">
+                    <strong>Cuenta Origen:</strong> {{ p.cuenta_origen }} <br>
+                    <strong>Cuenta Destino:</strong> {{ p.cuenta_destino }}
+                </p>
+
+                <!-- Estado -->
+                {% if p.estado == "Pagado" %}
+                <span class="badge bg-success badge-estado">Pagado</span>
+                {% else %}
+                <span class="badge bg-warning text-dark badge-estado">Pendiente</span>
+                {% endif %}
+
+                <!-- ============================ -->
+                <!-- SECCIÓN: DETALLES DE RESERVA -->
+                <!-- ============================ -->
+
+                <hr>
+
+                <p class="fw-bold mb-2">Detalles de la Reserva:</p>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    {% if p.factura_id %}
+                    {% if p.pdf_url %}
+                    <a class="btn btn-primary btn-sm" href="{{ p.pdf_url }}?3345678={{ p.factura_id|pdf_secure_token }}"
+                        target="_blank">
+                        <i class="bi bi-file-pdf"></i> Ver PDF
+                    </a>
+                    {% else %}
+                    <button class="btn btn-warning btn-sm generar-pdf-btn" data-factura="{{ p.factura_id }}">
+                        <i class="bi bi-file-pdf"></i> Generar PDF
+                    </button>
+                    {% endif %}
+                    {% else %}
+                    {% if p.id_reserva %}
+                    <button class="btn btn-success btn-sm generar-factura-btn" data-reserva="{{ p.id_reserva }}"
+                        data-pago="{{ p.id }}">
+                        <i class="bi bi-receipt"></i> Generar Factura
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled title="Este pago no tiene reserva asociada">
+                        <i class="bi bi-receipt"></i> Sin Reserva
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Modal para Generar Factura -->
+<div class="modal fade" id="modalGenerarFactura" tabindex="-1" aria-labelledby="modalGenerarFacturaLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalGenerarFacturaLabel">Generar Factura</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="usarOtrosDatos">
+                        <label class="form-check-label" for="usarOtrosDatos">
+                            Generar con otros datos
+                        </label>
+                    </div>
+                </div>
+
+                <form id="formGenerarFactura">
+                    <input type="hidden" id="facturaIdReserva" name="idReserva">
+
+                    <div class="mb-3">
+                        <label for="facturaNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="facturaNombre" name="nombre"
+                            value="{{ usuario_info.nombre|default:'' }}" readonly required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="facturaApellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="facturaApellido" name="apellido"
+                            value="{{ usuario_info.apellido|default:'' }}" readonly required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="facturaCorreo" class="form-label">Correo <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="facturaCorreo" name="correo"
+                            value="{{ usuario_info.correo|default:'' }}" readonly required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="facturaTipoDocumento" class="form-label">Tipo de Documento</label>
+                        <input type="text" class="form-control" id="facturaTipoDocumento" name="tipoDocumento"
+                            value="CEDULA" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="facturaDocumento" class="form-label">Documento <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="facturaDocumento" name="documento"
+                            value="{{ usuario_info.documento|default:'' }}" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarFactura">Generar Factura</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jvscript_archivos_defer %}
+<script src="{% static 'webapp/js/modals.js' %}"></script>
+<script>
+    // Si el usuario está logeado, agregamos ?uid=ID automáticamente
+    document.addEventListener("DOMContentLoaded", function () {
+        const uid = localStorage.getItem("usuario_id");
+        if (uid && window.location.search === "") {
+            window.location.href = "?uid=" + uid;
+        }
+    });
+</script>
+<script>
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("generar-pdf-btn")) {
+            // Protección contra doble clic
+            if (e.target.disabled) return;
+            e.target.disabled = true;
+            const textoOriginal = e.target.innerHTML;
+            e.target.innerHTML = '<i class="bi bi-hourglass-split"></i> Generando...';
+
+            const facturaId = e.target.dataset.factura;
+
+            // Validar que facturaId exista
+            if (!facturaId) {
+                showAlert("❌ Error", "No se pudo obtener el ID de la factura.", "error", () => {
+                    e.target.disabled = false;
+                    e.target.innerHTML = textoOriginal;
+                });
+                console.error("facturaId no encontrado en dataset:", e.target.dataset);
+                return;
+            }
+
+            // Validar que sea un número válido
+            const facturaIdNum = parseInt(facturaId);
+            if (isNaN(facturaIdNum) || facturaIdNum <= 0) {
+                showAlert("❌ Error", "ID de factura inválido.", "error", () => {
+                    e.target.disabled = false;
+                    e.target.innerHTML = textoOriginal;
+                });
+                return;
+            }
+
+            // Mostrar confirmación con información
+            showConfirmWithInfo(
+                "📄 Generar PDF",
+                {
+                    "Factura ID": facturaId,
+                    "Acción": "Generar documento PDF"
+                },
+                () => {
+                    // Usuario confirmó - proceder con generación
+                    fetch("/api/generar-pdf-reserva/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCookie("csrftoken")
+                        },
+                        body: JSON.stringify({ factura_id: facturaIdNum })
+                    })
+                        .then(r => {
+                            if (!r.ok) {
+                                return r.json().then(data => {
+                                    throw new Error(data.error || `Error ${r.status}: ${r.statusText}`);
+                                });
+                            }
+                            return r.json();
+                        })
+                        .then(data => {
+                            if (data.ok) {
+                                showAlert("✅ Éxito", "PDF generado correctamente.", "success", () => {
+                                    location.reload();
+                                });
+                            } else {
+                                showAlert("❌ Error", data.error || "Error desconocido", "error", () => {
+                                    e.target.disabled = false;
+                                    e.target.innerHTML = textoOriginal;
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Error al generar PDF:", err);
+                            showAlert("❌ Error", err.message, "error", () => {
+                                e.target.disabled = false;
+                                e.target.innerHTML = textoOriginal;
+                            });
+                        });
+                },
+                () => {
+                    // Usuario canceló - re-habilitar botón
+                    e.target.disabled = false;
+                    e.target.innerHTML = textoOriginal;
+                },
+                {
+                    textConfirm: "Sí, generar",
+                    textCancel: "Cancelar",
+                    colorFondo: "#ffc107",
+                    tipoConfirm: "warning"
+                }
+            );
+        }
+    });
+
+    // Helper para obtener CSRF token
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+        return null;
+    }
+
+    // Modal de Generar Factura
+    document.addEventListener("DOMContentLoaded", function () {
+        const modalGenerarFactura = new bootstrap.Modal(document.getElementById('modalGenerarFactura'));
+        const checkboxOtrosDatos = document.getElementById('usarOtrosDatos');
+        const formFactura = document.getElementById('formGenerarFactura');
+        const btnConfirmarFactura = document.getElementById('btnConfirmarFactura');
+
+        // Campos del formulario (excluyendo tipoDocumento que siempre está bloqueado)
+        const campos = ['facturaNombre', 'facturaApellido', 'facturaCorreo', 'facturaDocumento'];
+
+        // Manejar checkbox "Generar con otros datos"
+        checkboxOtrosDatos.addEventListener('change', function () {
+            campos.forEach(campoId => {
+                const campo = document.getElementById(campoId);
+                if (campo) {
+                    campo.readOnly = !this.checked;
+                    if (this.checked) {
+                        campo.classList.remove('bg-light');
+                    } else {
+                        campo.classList.add('bg-light');
+                    }
+                }
+            });
+            // Tipo de documento siempre bloqueado
+            const tipoDoc = document.getElementById('facturaTipoDocumento');
+            if (tipoDoc) {
+                tipoDoc.readOnly = true;
+                tipoDoc.classList.add('bg-light');
+            }
+        });
+
+        // ========== VALIDACIONES DE CAMPOS ==========
+        const inputNombre = document.getElementById('facturaNombre');
+        const inputApellido = document.getElementById('facturaApellido');
+        const inputDocumento = document.getElementById('facturaDocumento');
+        const inputCorreo = document.getElementById('facturaCorreo');
+
+        // Función para validar solo letras SIN ESPACIOS
+        function validarSoloLetras(input) {
+            if (input.readOnly) return;
+
+            const original = input.value;
+            // Solo letras, SIN ESPACIOS
+            const soloLetras = original.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
+
+            if (original !== soloLetras) {
+                input.value = soloLetras;
+            }
+        }
+
+        // Función para validar correo (sin espacios)
+        function validarCorreo(input) {
+            if (input.readOnly) return;
+            const original = input.value;
+            const sinEspacios = original.replace(/\s/g, '');
+            if (original !== sinEspacios) {
+                input.value = sinEspacios;
+            }
+        }
+
+        // Validar formato de correo
+        function esCorreoValido(correo) {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return regex.test(correo);
+        }
+
+        // Función para validar solo dígitos, máximo 10
+        function validarDocumento(input) {
+            // Solo ejecutar si el campo es editable
+            if (input.readOnly) return;
+
+            const original = input.value;
+            // Solo números, máximo 10
+            const soloNumeros = original.replace(/\D/g, '').slice(0, 10);
+
+            if (original !== soloNumeros) {
+                input.value = soloNumeros;
+            }
+        }
+
+        // Agregar listeners si los campos existen
+        if (inputNombre) {
+            inputNombre.addEventListener('input', () => validarSoloLetras(inputNombre));
+            // Prevenir CUALQUIER espacio
+            inputNombre.addEventListener('keypress', (e) => {
+                if (!inputNombre.readOnly && e.key === ' ') {
+                    e.preventDefault();
+                }
+            });
+            // Limpiar al pegar
+            inputNombre.addEventListener('paste', (e) => {
+                if (inputNombre.readOnly) return;
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                const soloLetras = text.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
+                document.execCommand('insertText', false, soloLetras);
+            });
+        }
+
+        if (inputApellido) {
+            inputApellido.addEventListener('input', () => validarSoloLetras(inputApellido));
+            // Prevenir CUALQUIER espacio
+            inputApellido.addEventListener('keypress', (e) => {
+                if (!inputApellido.readOnly && e.key === ' ') {
+                    e.preventDefault();
+                }
+            });
+            // Limpiar al pegar
+            inputApellido.addEventListener('paste', (e) => {
+                if (inputApellido.readOnly) return;
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                const soloLetras = text.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ]/g, '');
+                document.execCommand('insertText', false, soloLetras);
+            });
+        }
+
+        if (inputDocumento) {
+            inputDocumento.addEventListener('input', () => validarDocumento(inputDocumento));
+            // Prevenir cualquier carácter que no sea número
+            inputDocumento.addEventListener('keypress', (e) => {
+                if (!inputDocumento.readOnly && !/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+            // Manejar paste - solo permitir números
+            inputDocumento.addEventListener('paste', (e) => {
+                if (inputDocumento.readOnly) return;
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                const soloNumeros = text.replace(/\D/g, '').slice(0, 10);
+                document.execCommand('insertText', false, soloNumeros);
+            });
+        }
+
+        // Agregar listeners para CORREO
+        if (inputCorreo) {
+            inputCorreo.addEventListener('input', () => validarCorreo(inputCorreo));
+            inputCorreo.addEventListener('keypress', (e) => {
+                if (!inputCorreo.readOnly && e.key === ' ') {
+                    e.preventDefault();
+                }
+            });
+            inputCorreo.addEventListener('paste', (e) => {
+                if (inputCorreo.readOnly) return;
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text');
+                const sinEspacios = text.replace(/\s/g, '');
+                document.execCommand('insertText', false, sinEspacios);
+            });
+        }
+        // ========== FIN VALIDACIONES ==========
+
+        // Manejar clic en botón "Generar Factura"
+        document.querySelectorAll('.generar-factura-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                // Protección contra doble clic
+                if (this.disabled) return;
+                this.disabled = true;
+                const textoOriginal = this.innerHTML;
+                this.innerHTML = '<i class="bi bi-hourglass-split"></i> Cargando...';
+
+                const idReserva = this.dataset.reserva;
+
+                // Debug: ver qué valor viene del botón
+                console.log('[DEBUG] Botón clickeado, data-reserva:', idReserva);
+                console.log('[DEBUG] Tipo de idReserva:', typeof idReserva);
+
+                if (!idReserva || idReserva === 'None' || idReserva === 'null' || idReserva === 'undefined') {
+                    showAlert('⚠️ Error', 'No se pudo obtener el ID de la reserva. El pago no tiene una reserva asociada.', 'error', () => {
+                        this.disabled = false;
+                        this.innerHTML = textoOriginal;
+                    });
+                    return;
+                }
+
+                // Resetear formulario
+                checkboxOtrosDatos.checked = false;
+                campos.forEach(campoId => {
+                    const campo = document.getElementById(campoId);
+                    if (campo) {
+                        campo.readOnly = true;
+                        campo.classList.add('bg-light');
+                    }
+                });
+                // Tipo de documento siempre bloqueado
+                const tipoDoc = document.getElementById('facturaTipoDocumento');
+                if (tipoDoc) {
+                    tipoDoc.readOnly = true;
+                    tipoDoc.classList.add('bg-light');
+                }
+
+                // Establecer id_reserva
+                document.getElementById('facturaIdReserva').value = idReserva;
+                console.log('[DEBUG] Input facturaIdReserva establecido a:', idReserva);
+
+                // Mostrar modal
+                modalGenerarFactura.show();
+            });
+        });
+
+        // Manejar confirmación de factura
+        btnConfirmarFactura.addEventListener('click', function () {
+            const formData = new FormData(formFactura);
+            const data = {
+                idReserva: formData.get('idReserva'),
+                nombre: formData.get('nombre'),
+                apellido: formData.get('apellido'),
+                correo: formData.get('correo'),
+                tipoDocumento: formData.get('tipoDocumento'),
+                documento: formData.get('documento')
+            };
+
+            // Debug: verificar qué valor tiene idReserva
+            console.log('[DEBUG] Data completa:', data);
+            console.log('[DEBUG] idReserva:', data.idReserva);
+
+            if (!data.idReserva || data.idReserva === 'null' || data.idReserva === 'None') {
+                showAlert('⚠️ Error de Datos', 'No se encontró el ID de la reserva. Por favor, contacte al administrador.', 'error', () => {
+                    btnConfirmarFactura.disabled = false;
+                    btnConfirmarFactura.textContent = 'Confirmar';
+                });
+                return;
+            }
+
+            if (!data.correo) {
+                showAlert('⚠️ Correo Requerido', 'El correo es obligatorio.', 'warning', () => {
+                    btnConfirmarFactura.disabled = false;
+                    btnConfirmarFactura.textContent = 'Confirmar';
+                });
+                return;
+            }
+
+            // Validar formato de correo
+            if (!esCorreoValido(data.correo)) {
+                showAlert('⚠️ Correo Inválido', 'Por favor ingresa un correo electrónico válido (ej: usuario@dominio.com).', 'warning', () => {
+                    btnConfirmarFactura.disabled = false;
+                    btnConfirmarFactura.textContent = 'Confirmar';
+                });
+                return;
+            }
+
+            if (!data.documento) {
+                showAlert('⚠️ Documento Requerido', 'El documento es obligatorio.', 'warning', () => {
+                    btnConfirmarFactura.disabled = false;
+                    btnConfirmarFactura.textContent = 'Confirmar';
+                });
+                return;
+            }
+
+            // Deshabilitar botón mientras se procesa
+            btnConfirmarFactura.disabled = true;
+            btnConfirmarFactura.textContent = 'Generando...';
+
+            fetch('/api/generar-factura/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(data)
+            })
+                .then(r => {
+                    if (!r.ok) {
+                        return r.json().then(data => {
+                            throw new Error(data.error || `Error ${r.status}: ${r.statusText}`);
+                        });
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    if (data.ok) {
+                        showAlert("✅ Éxito", "Factura generada exitosamente.", "success", () => {
+                            modalGenerarFactura.hide();
+
+                            // Encontrar el botón que se usó para abrir el modal
+                            const idReservaGenerada = formData.get('idReserva');
+                            const botonGenerarFactura = document.querySelector(`.generar-factura-btn[data-reserva="${idReservaGenerada}"]`);
+
+                            if (botonGenerarFactura) {
+                                // Obtener el contenedor del botón
+                                const contenedorBoton = botonGenerarFactura.parentElement;
+
+                                // Crear el nuevo botón "Generar PDF"
+                                const nuevoBoton = document.createElement('button');
+                                nuevoBoton.className = 'btn btn-warning btn-sm generar-pdf-btn';
+                                nuevoBoton.setAttribute('data-factura', data.factura);
+                                nuevoBoton.innerHTML = '<i class="bi bi-file-pdf"></i> Generar PDF';
+
+                                // Reemplazar el botón viejo con el nuevo
+                                contenedorBoton.replaceChild(nuevoBoton, botonGenerarFactura);
+
+                                console.log('[DEBUG] Botón cambiado de "Generar Factura" a "Generar PDF"');
+                            } else {
+                                console.warn('[DEBUG] No se encontró el botón para actualizar, recargando página...');
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        showAlert("❌ Error", data.error || "Error desconocido", "error", () => {
+                            btnConfirmarFactura.disabled = false;
+                            btnConfirmarFactura.textContent = 'Confirmar';
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error al generar factura:', err);
+                    showAlert("❌ Error", err.message, "error", () => {
+                        btnConfirmarFactura.disabled = false;
+                        btnConfirmarFactura.textContent = 'Generar Factura';
+                    });
+                });
+        });
+    });
+
+</script>
+
+{% endblock %}

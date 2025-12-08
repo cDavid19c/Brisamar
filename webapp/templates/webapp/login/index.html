@@ -1,0 +1,229 @@
+{% extends "cabezal.html" %}
+{% load static %}
+
+{% block titulo_pagina %}
+<title>Sign In | AllpaHouseNYC - Manhattan</title>
+{% endblock %}
+
+{% block css_archivos %}
+<style>
+    :root {
+        --color-principal: #8B7355;
+        --color-secundario: #6B5842;
+        --color-accent: #8B7355;
+        --degradado: linear-gradient(135deg, #8B7355 0%, #6B5842 100%);
+    }
+
+    .login-wrapper {
+        min-height: 100vh;
+        background: var(--degradado);
+        background-image:
+            linear-gradient(135deg, rgba(42, 41, 38, 0.85) 0%, rgba(107, 88, 66, 0.90) 100%),
+            url('https://images.unsplash.com/photo-1490644658840-3f2e3f8c5625?w=1920&q=80');
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+    }
+
+    .login-card {
+        border-radius: 1.5rem;
+        padding: 2rem;
+    }
+
+    .login-card .form-control,
+    .login-card .input-group-text {
+        border-radius: 0.75rem;
+    }
+
+    .btn-primary {
+        border-radius: 0.75rem;
+        padding: 0.7rem;
+        font-weight: 600;
+        background-color: var(--color-accent);
+        border: 1px solid var(--color-accent);
+    }
+
+    .btn-primary:hover {
+        background-color: color-mix(in srgb, var(--color-accent), black 10%);
+        border-color: color-mix(in srgb, var(--color-accent), black 10%);
+        transform: translateY(-1px);
+    }
+
+    .btn-outline-primary {
+        border-radius: 0.75rem;
+        padding: 0.7rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block contenido_pagina %}
+<div class="login-wrapper">
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card shadow-lg border-0 login-card">
+
+            <div class="text-center mb-4">
+                <i class="bi bi-building-fill fs-1" style="color: var(--color-accent);"></i>
+                <h3 class="fw-bold mt-2" style="color: var(--color-accent);">Welcome Back</h3>
+                <p class="text-muted">Sign in to <strong>AllpaHouseNYC</strong></p>
+                <p class="small text-muted mb-0">Manhattan, New York</p>
+            </div>
+
+            <!-- MENSAJE DE ERROR -->
+            {% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-danger text-center p-2">{{ msg }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- FORMULARIO -->
+            <form action="{% url 'login_post' %}" method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                        <input type="email" name="correo" class="form-control" placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-lock"></i>
+                        </span>
+                        <input type="password" name="clave" class="form-control toggle-password" placeholder="••••••••"
+                            required>
+                        <button class="btn btn-outline-secondary toggle-password-btn" type="button">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="recordar">
+                        <label class="form-check-label" for="recordar">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="small text-decoration-none">Forgot password?</a>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-primary">Sign In</button>
+                </div>
+
+                <div class="text-center my-3">
+                    <span class="text-muted small">Don't have an account?</span>
+                </div>
+
+                <div class="d-grid">
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary">Create Account</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block jvscript_archivos_defer %}
+<script>
+    // Toggle para ver/ocultar contraseña
+    document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            const icon = this.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+    });
+
+    // Prevenir espacios en el campo de correo electrónico
+    document.querySelectorAll('input[name="correo"]').forEach(input => {
+        input.addEventListener('keypress', function (e) {
+            if (e.key === ' ') {
+                e.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', function (e) {
+            // Remover espacios si se insertan por cualquier medio
+            this.value = this.value.replace(/\s/g, '');
+        });
+
+        input.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            const textSinEspacios = text.replace(/\s/g, '');
+            document.execCommand('insertText', false, textSinEspacios);
+        });
+    });
+
+    // Prevenir espacios en el campo de contraseña
+    document.querySelectorAll('input[name="clave"]').forEach(input => {
+        input.addEventListener('keypress', function (e) {
+            if (e.key === ' ') {
+                e.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', function (e) {
+            // Remover espacios si se insertan por cualquier medio
+            this.value = this.value.replace(/\s/g, '');
+        });
+
+        input.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            const textSinEspacios = text.replace(/\s/g, '');
+            document.execCommand('insertText', false, textSinEspacios);
+        });
+    });
+</script>
+<script>
+    {% if login_exitoso %}
+    console.log("Inicio de sesión correcto. Guardando en localStorage...");
+
+    // Guardar TODOS los datos del usuario en localStorage
+    localStorage.setItem("usuario_id", "{{ usuario.id }}");
+    localStorage.setItem("usuario_correo", "{{ usuario.correo }}");
+    localStorage.setItem("usuario_nombre", "{{ usuario.nombre }}");
+    localStorage.setItem("usuario_apellido", "{{ usuario.apellido }}");
+    localStorage.setItem("usuario_rol", "{{ usuario.rol }}");
+    localStorage.setItem("usuario_tipo_doc", "{{ usuario.tipo_doc }}");
+    localStorage.setItem("usuario_documento", "{{ usuario.documento }}");
+    localStorage.setItem("usuario_fecha_nac", "{{ usuario.fecha_nac }}");
+
+    // Las cookies ya están establecidas desde el servidor
+    console.log("Cookies establecidas: usuario_rol={{ usuario.rol }}, usuario_id={{ usuario.id }}");
+
+    // Redirigir al inicio luego de guardar
+    setTimeout(() => {
+        window.location.href = "/";
+    }, 600);
+    {% endif %}
+</script>
+
+
+
+
+{% endblock %}

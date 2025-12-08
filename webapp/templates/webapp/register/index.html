@@ -1,0 +1,363 @@
+{% extends "cabezal.html" %}
+{% load static %}
+
+{% block titulo_pagina %}
+<title>Crear Cuenta | Hotel AureaCuen - Cuenca</title>
+{% endblock %}
+
+{% block css_archivos %}
+<style>
+    :root {
+        --color-principal: #2f5d50;
+        --color-secundario: #436e62;
+        --color-accent: #2f5d50;
+        --degradado: linear-gradient(135deg, #436e62 0%, #2f5d50 100%);
+    }
+
+    .btn-primary {
+        background-color: var(--color-accent);
+        border: 1px solid var(--color-accent);
+    }
+
+    .btn-primary:hover {
+        background-color: color-mix(in srgb, var(--color-accent), black 10%);
+        border-color: color-mix(in srgb, var(--color-accent), black 10%);
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block contenido_pagina %}
+<section class="min-vh-100 d-flex align-items-center justify-content-center"
+    style="background: var(--degradado); background-image: linear-gradient(135deg, rgba(67, 110, 98, 0.9) 0%, rgba(47, 93, 80, 0.9) 100%), url('https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <div class="col-md-7 col-lg-5">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <i class="bi bi-person-plus fs-1" style="color: var(--color-accent);"></i>
+                            <h3 class="fw-bold" style="color: var(--color-accent);">Registrar Usuario</h3>
+                            <p class="text-muted mb-1">Únete a <strong>Hotel AureaCuen</strong></p>
+                            <p class="small text-muted mb-0">Cuenca, Ecuador</p>
+                        </div>
+
+                        <!-- MENSAJES DEL BACKEND -->
+                        {% if messages %}
+                        {% for msg in messages %}
+                        <div class="alert alert-danger text-center p-2">{{ msg }}</div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <!-- novalidate para que no moleste la validación nativa -->
+                        <form action="{% url 'register_post' %}" method="post" id="formRegistro" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Nombre -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Nombre</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input name="nombre" type="text" class="form-control" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                    El nombre es obligatorio y solo puede contener letras y espacios.
+                                </div>
+                            </div>
+
+                            <!-- Apellido -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Apellido</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input name="apellido" type="text" class="form-control" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                    El apellido es obligatorio y solo puede contener letras y espacios.
+                                </div>
+                            </div>
+
+                            <!-- Correo -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Correo electrónico</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input name="correo" type="email" class="form-control" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Ingrese un correo electrónico válido (ejemplo: usuario@dominio.com).
+                                </div>
+                            </div>
+
+                            <!-- Tipo Documento -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Tipo de documento</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-card-text"></i>
+                                    </span>
+                                    <select name="tipo_documento" class="form-select" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="CEDULA">Cédula</option>
+                                        <option value="PASAPORTE">Pasaporte</option>
+                                        <option value="OTRO">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Debe seleccionar un tipo de documento.
+                                </div>
+                            </div>
+
+                            <!-- Documento -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Número de documento (10 dígitos)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-hash"></i>
+                                    </span>
+                                    <!-- solo números vía JS -->
+                                    <input name="documento" type="text" class="form-control" required
+                                        inputmode="numeric">
+                                </div>
+                                <div class="invalid-feedback">
+                                    El documento es obligatorio y debe tener exactamente 10 números.
+                                </div>
+                            </div>
+
+                            <!-- Clave -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Contraseña</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input name="clave" type="password" class="form-control" required>
+                                    <button class="btn btn-outline-secondary toggle-password-btn" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    La contraseña es obligatoria y no puede contener espacios.
+                                </div>
+                            </div>
+
+                            <!-- Botón -->
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary fw-semibold py-2">
+                                    Crear cuenta
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <span class="text-muted small">¿Ya tienes una cuenta?</span><br>
+                                <a href="{% url 'login' %}" class="text-primary fw-semibold small text-decoration-none">
+                                    Iniciar sesión
+                                </a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block jvscript_archivos_defer %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("formRegistro");
+        if (!form) return;
+
+        const nombreInput = form.querySelector('input[name="nombre"]');
+        const apellidoInput = form.querySelector('input[name="apellido"]');
+        const correoInput = form.querySelector('input[name="correo"]');
+        const tipoDocSelect = form.querySelector('select[name="tipo_documento"]');
+        const documentoInput = form.querySelector('input[name="documento"]');
+        const claveInput = form.querySelector('input[name="clave"]');
+
+        /* ========= Toggle ver/ocultar contraseña ========= */
+        document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        });
+
+        /* ========= Helpers para tooltip (burbuja) ========= */
+        function showBubble(input, message) {
+            if (!window.bootstrap) return; // por si acaso
+            input.setAttribute('data-bs-toggle', 'tooltip');
+            input.setAttribute('data-bs-placement', 'right');
+            input.setAttribute('title', message);
+
+            // destruir tooltip anterior si existe, para actualizar texto
+            const old = bootstrap.Tooltip.getInstance(input);
+            if (old) old.dispose();
+
+            const tooltip = new bootstrap.Tooltip(input);
+            tooltip.show();
+        }
+
+        function hideBubble(input) {
+            if (!window.bootstrap) return;
+            const tooltip = bootstrap.Tooltip.getInstance(input);
+            if (tooltip) tooltip.hide();
+            input.removeAttribute('title');
+        }
+
+        function setInvalid(input, message) {
+            input.classList.add("is-invalid");
+            input.classList.remove("is-valid");
+            if (message) showBubble(input, message);
+        }
+
+        function setValid(input) {
+            input.classList.add("is-valid");
+            input.classList.remove("is-invalid");
+            hideBubble(input);
+        }
+
+        /* ========= Nombre y Apellido: solo letras + trim automático ========= */
+        function validarSoloLetras(input, label) {
+            const original = input.value;
+            const soloLetras = original.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, "");
+            // Trim automático: remover espacios al inicio y final
+            const limpio = soloLetras.trim();
+
+            // Actualizar el valor del input si hubo caracteres inválidos o espacios extremos
+            if (original !== limpio) {
+                // Preservar espacios internos pero eliminar extremos
+                input.value = limpio;
+            }
+
+            if (limpio === "") {
+                setInvalid(input, `${label} es obligatorio y solo puede contener letras.`);
+                return false;
+            }
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/.test(limpio)) {
+                setInvalid(input, `${label} solo puede contener letras y espacios.`);
+                return false;
+            }
+
+            setValid(input);
+            return true;
+        }
+
+        nombreInput.addEventListener("input", () => validarSoloLetras(nombreInput, "El nombre"));
+        // También hacer trim cuando pierde el foco
+        nombreInput.addEventListener("blur", () => { nombreInput.value = nombreInput.value.trim(); validarSoloLetras(nombreInput, "El nombre"); });
+        apellidoInput.addEventListener("input", () => validarSoloLetras(apellidoInput, "El apellido"));
+        apellidoInput.addEventListener("blur", () => { apellidoInput.value = apellidoInput.value.trim(); validarSoloLetras(apellidoInput, "El apellido"); });
+
+        /* ========= Documento: solo números, exactamente 10 ========= */
+        function validarDocumento(input) {
+            const original = input.value;
+            const soloNums = original.replace(/\D/g, "").slice(0, 10);
+            if (original !== soloNums) {
+                input.value = soloNums;     // limpia letras y corta en 10
+            }
+
+            if (soloNums.length !== 10) {
+                setInvalid(input, "El número de documento debe tener exactamente 10 dígitos.");
+                return false;
+            }
+
+            setValid(input);
+            return true;
+        }
+
+        documentoInput.addEventListener("input", () => validarDocumento(documentoInput));
+
+        /* ========= Correo ========= */
+        const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+
+        function validarCorreo(input) {
+            const valor = input.value.trim();
+
+            if (!regexCorreo.test(valor)) {
+                setInvalid(input, "Ejemplo válido: usuario@dominio.com");
+                return false;
+            }
+
+            setValid(input);
+            return true;
+        }
+
+        correoInput.addEventListener("input", () => validarCorreo(correoInput));
+
+        /* ========= Tipo de documento ========= */
+        function validarTipoDocumento(select) {
+            if (!select.value) {
+                setInvalid(select, "Selecciona un tipo de documento.");
+                return false;
+            }
+            setValid(select);
+            return true;
+        }
+
+        tipoDocSelect.addEventListener("change", () => validarTipoDocumento(tipoDocSelect));
+
+        /* ========= Clave: sin espacios y no vacía ========= */
+        function validarClave(input) {
+            // Remover espacios automáticamente
+            input.value = input.value.replace(/\s/g, '');
+            const valor = input.value;
+
+            if (valor.trim() === "") {
+                setInvalid(input, "La contraseña es obligatoria.");
+                return false;
+            }
+
+            setValid(input);
+            return true;
+        }
+
+        claveInput.addEventListener("input", () => validarClave(claveInput));
+        // Prevenir digitación de espacios
+        claveInput.addEventListener("keypress", (e) => { if (e.key === ' ') e.preventDefault(); });
+        // Limpiar espacios en paste
+        claveInput.addEventListener("paste", (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            const textSinEspacios = text.replace(/\s/g, '');
+            document.execCommand('insertText', false, textSinEspacios);
+        });
+
+        /* ========= Validar todo antes de enviar ========= */
+        form.addEventListener("submit", function (e) {
+            const okNombre = validarSoloLetras(nombreInput, "El nombre");
+            const okApellido = validarSoloLetras(apellidoInput, "El apellido");
+            const okCorreo = validarCorreo(correoInput);
+            const okTipoDoc = validarTipoDocumento(tipoDocSelect);
+            const okDocumento = validarDocumento(documentoInput);
+            const okClave = validarClave(claveInput);
+
+            if (!okNombre || !okApellido || !okCorreo || !okTipoDoc || !okDocumento || !okClave) {
+                e.preventDefault();
+                // feedback general con modal bonito
+                showAlert("⚠️ Campos Incompletos", "Corrige los campos marcados en rojo. Pasa el mouse sobre ellos para ver la sugerencia.", "warning");
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,245 @@
+/* =============================
+   AllpaHouseNYC - Homepage Styles
+   Elegant Beige Palette
+   ============================= */
+
+/* =============================
+   HERO SECTION con Imagen NYC
+   ============================= */
+.hero-section {
+    min-height: 85vh;
+    background: linear-gradient(135deg, rgba(42, 41, 38, 0.75) 0%, rgba(107, 88, 66, 0.65) 100%),
+        url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1920&q=80') center/cover;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section h1 {
+    font-family: var(--heading-font);
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+}
+
+.hero-section .lead {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.4);
+    opacity: 0.95;
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.8;
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero-buttons .btn {
+    margin: 0.5rem;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .btn-primary {
+    background: var(--color-marron-calido);
+    color: white;
+    box-shadow: 0 6px 20px rgba(139, 115, 85, 0.4);
+}
+
+.hero-buttons .btn-primary:hover {
+    background: var(--color-marron-oscuro);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(139, 115, 85, 0.5);
+}
+
+.hero-buttons .btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    background: transparent;
+}
+
+.hero-buttons .btn-outline-light:hover {
+    background: white;
+    color: var(--color-marron-calido);
+    transform: translateY(-4px);
+}
+
+/* =============================
+   SECCIONES
+   ============================= */
+
+section {
+    padding: 5rem 0;
+}
+
+.section-label {
+    color: var(--color-marron-calido);
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+section h2 {
+    font-family: var(--heading-font);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-carbon);
+    margin-bottom: 1rem;
+}
+
+section .lead {
+    max-width: 850px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--texto-secundario);
+}
+
+/* =============================
+   FEATURE CARDS
+   ============================= */
+
+.feature-card {
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+}
+
+.feature-card img {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover img {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h5 {
+    font-family: var(--heading-font);
+    font-weight: 600;
+    color: var(--color-marron-calido);
+}
+
+.feature-card p {
+    color: var(--texto-secundario);
+    line-height: 1.7;
+}
+
+/* =============================
+   SERVICIOS — CARDS
+   ============================= */
+
+.hover-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: none;
+}
+
+.hover-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.card-body i {
+    font-size: 3rem;
+    color: var(--color-marron-calido);
+}
+
+.card-body h5 {
+    font-family: var(--heading-font);
+    font-weight: 600;
+    color: var(--color-carbon);
+    margin-top: 1rem;
+}
+
+.card-body p {
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* =============================
+   HABITACIONES PREVIEW
+   ============================= */
+
+.card-img-top {
+    height: 240px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.card h5 {
+    font-family: var(--heading-font);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-carbon);
+}
+
+.card .text-muted {
+    font-size: 0.95rem;
+    color: var(--texto-secundario) !important;
+}
+
+/* =============================
+   RESPONSIVE
+   ============================= */
+
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 70vh;
+        text-align: center;
+        background-attachment: scroll;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-section .lead {
+        font-size: 1.2rem;
+    }
+
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    section {
+        padding: 3rem 0;
+    }
+
+    section h2 {
+        font-size: 2rem;
+    }
+}
