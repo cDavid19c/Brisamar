@@ -10,7 +10,7 @@ class HabxResGestionSoap:
     def __init__(self):
         # WSDL publicado en Azure
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/HabxResWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/HabxResWS.asmx?wsdl"
         )
 
         # Azure → certificados intermedios, permitimos verify=False

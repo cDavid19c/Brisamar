@@ -13,10 +13,10 @@ class PdfGestionRest:
     Equivalente al controlador PdfGestionController en C#.
 
     URL base:
-    http://aureacuengr.runasp.net/api/gestion/pdf
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/pdf"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/pdf"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

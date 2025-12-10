@@ -10,7 +10,7 @@ class DesxHabxResGestionSoap:
     def __init__(self):
         # 🔥 WSDL PUBLICADO EN AZURE
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/DesxHabxResWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/DesxHabxResWS.asmx?wsdl"
         )
 
         # Desactivar SSL (Azure usa certificado intermedio)

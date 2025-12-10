@@ -11,7 +11,7 @@ class CiudadGestionRest:
     
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/ciudad"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/ciudad"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

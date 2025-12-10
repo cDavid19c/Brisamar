@@ -8,7 +8,7 @@ class DescuentoGestionSoap:
 
     def __init__(self):
         # Cambia el puerto si tu SOAP usa otro
-        self.wsdl = "http://allpahousenycgs.runasp.net/DescuentoWS.asmx?wsdl"
+        self.wsdl = "http://brisamargs.runasp.net/DescuentoWS.asmx?wsdl"
 
         # Desactivar SSL (IIS Express usa certificado auto-firmado)
         session = requests.Session()

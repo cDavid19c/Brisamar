@@ -10,7 +10,7 @@ class PaisGestionSoap:
     def __init__(self):
         # 👉 Asegúrate de que el link sea exactamente este:
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/PaisWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/PaisWS.asmx?wsdl"
         )
 
         session = requests.Session()

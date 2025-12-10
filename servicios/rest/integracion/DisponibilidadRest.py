@@ -9,7 +9,7 @@ class DisponibilidadRest:
     Equivalente a DisponibilidadController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/availability"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/availability"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

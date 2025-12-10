@@ -10,7 +10,7 @@ class TipoHabitacionGestionSoap:
     def __init__(self):
         # URL WSDL del servicio SOAP publicado en Azure
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/TipoHabitacionWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/TipoHabitacionWS.asmx?wsdl"
         )
 
         session = requests.Session()

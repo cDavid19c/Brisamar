@@ -12,7 +12,7 @@ class DesxHabxResGestionRest:
     
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/desxhabxres"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/desxhabxres"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

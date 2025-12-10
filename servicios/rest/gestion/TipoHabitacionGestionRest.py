@@ -6,7 +6,7 @@ class TipoHabitacionGestionRest:
 
     def __init__(self):
         # URL BASE DEL SERVICIO EN AZURE
-        self.base_url = "http://allphahousenycrg.runasp.net/api/gestion/tipos-habitacion"
+        self.base_url = "http://brisamargr.runasp.net/api/gestion/tipos-habitacion"
 
     # ================================================================
     # GET: obtener todos los tipos de habitación

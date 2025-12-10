@@ -16,7 +16,7 @@ class FacturasGestionRest:
     
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/facturas"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/facturas"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

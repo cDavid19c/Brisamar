@@ -12,10 +12,10 @@ class FuncionesEspecialesGestionRest:
     - Emitir factura para usuario interno
 
     Base URL:
-    http://aureacuengr.runasp.net/api/v1/hoteles/funciones-especiales
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/v1/hoteles/funciones-especiales"
+    BASE_URL = "http://brisamargr.runasp.net/api/v1/hoteles/funciones-especiales"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

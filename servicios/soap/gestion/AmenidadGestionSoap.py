@@ -7,7 +7,7 @@ from datetime import datetime
 class AmenidadGestionSoap:
 
     def __init__(self):
-        self.wsdl = "http://allpahousenycgs.runasp.net/AmenidadWS.asmx?wsdl"
+        self.wsdl = "http://brisamargs.runasp.net/AmenidadWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

@@ -12,8 +12,8 @@ class BancoRest:
     BASE_URL = "http://mibanca.runasp.net"
     
     # Cuentas fijas del sistema
-    CUENTA_CLIENTE = "1727007906"  # Cuenta que usan todos los clientes
-    CUENTA_HOTEL = "1727007914"    # Cuenta donde se reciben los pagos
+    CUENTA_CLIENTE = "1727115820"  # Cuenta que usan todos los clientes
+    CUENTA_HOTEL = "1727115810"    # Cuenta donde se reciben los pagos
     
     def __init__(self):
         self.headers = {

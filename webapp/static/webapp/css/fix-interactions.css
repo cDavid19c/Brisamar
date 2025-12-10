@@ -1,0 +1,66 @@
+/* ========================================
+   FIX CRÍTICO: Permitir interacción con elementos
+   ======================================== */
+
+/* Todos los pseudo-elementos decorativos NO deben bloquear clics */
+.hero-section::before,
+.hero-section::after,
+.hero-content::before,
+.hero-content::after,
+.light-background::before,
+.card::before,
+.card::after,
+.hover-card::before,
+.hover-card::after,
+.footer-modern::before,
+section h2::after,
+.navbar-nav .nav-link::before,
+.navbar-nav .nav-link::after,
+.hero-buttons .btn::before,
+.navbar .btn-primary::before,
+.btn::before,
+.btn::after {
+    pointer-events: none !important;
+}
+
+/* Asegurar que los inputs y selects sean clicables */
+input,
+select,
+button,
+textarea,
+.form-control,
+.btn,
+a {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* Los elementos interactivos deben tener z-index más alto */
+.buscador-form input,
+.buscador-form select,
+.buscador-form button {
+    position: relative;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
+
+/* Específicamente el input de fechas */
+#rangoFechas {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 100 !important;
+}
+
+/* Asegurar que los dropdowns funcionen */
+.dropdown-menu {
+    pointer-events: auto !important;
+    z-index: 1060 !important;
+}
+
+/* Los cards deben permitir clics en sus enlaces */
+.card a,
+.card .btn {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}

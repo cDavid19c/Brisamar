@@ -9,7 +9,7 @@ class UsuarioExternoRest:
     Equivalente al UsuarioExternoController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/usuarios/externo"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/usuarios/externo"
 
     def __init__(self):
         self.headers = {

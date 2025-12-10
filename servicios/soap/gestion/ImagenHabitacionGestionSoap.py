@@ -9,7 +9,7 @@ class ImagenHabitacionGestionSoap:
 
     def __init__(self):
         # Asegúrate de que esta URL coincida con donde desplegaste el .asmx
-        self.wsdl = "http://allpahousenycgs.runasp.net/ImagenHabitacionWS.asmx?wsdl"
+        self.wsdl = "http://brisamargs.runasp.net/ImagenHabitacionWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

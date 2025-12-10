@@ -11,7 +11,7 @@ class ReservaSoap:
     """
 
     def __init__(self):
-        self.wsdl = "http://allpahousenyc.runasp.net/buscarDatosReservaWS.asmx?wsdl"
+        self.wsdl = "http://soapbrisamar.runasp.net/buscarDatosReservaWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

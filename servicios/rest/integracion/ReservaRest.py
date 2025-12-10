@@ -9,7 +9,7 @@ class ReservaRest:
     Equivalente al ReservaController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/reserva"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/reserva"
 
     def __init__(self):
         self.headers = {

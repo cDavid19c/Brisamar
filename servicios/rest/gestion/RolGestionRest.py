@@ -5,7 +5,7 @@ import requests
 class RolGestionRest:
     def __init__(self):
         # URL BASE DE TU API EN AZURE
-        self.base_url = "http://allphahousenycrg.runasp.net/api/gestion/rol"
+        self.base_url = "http://brisamargr.runasp.net/api/gestion/rol"
 
     # ----------------------------------------------------------------------
     # OBTENER TODOS LOS ROLES

@@ -9,7 +9,7 @@ class FuncionesEspecialesGestionSoap:
 
     def __init__(self):
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/GestionFuncionesEspecialesWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/GestionFuncionesEspecialesWS.asmx?wsdl"
         )
 
         session = requests.Session()

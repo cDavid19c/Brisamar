@@ -12,7 +12,7 @@ class PreReservaSoap:
     """
 
     def __init__(self):
-        self.wsdl = "http://allpahousenyc.runasp.net/CrearPreReservaWS.asmx?wsdl"
+        self.wsdl = "http://soapbrisamar.runasp.net/CrearPreReservaWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

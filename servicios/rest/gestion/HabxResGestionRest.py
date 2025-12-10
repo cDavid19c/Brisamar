@@ -11,10 +11,10 @@ class HabxResGestionRest:
     Equivalente al controlador HabxResGestionController en C#.
 
     BASE:
-    http://aureacuengr.runasp.net/api/gestion/habxres
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/habxres"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/habxres"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

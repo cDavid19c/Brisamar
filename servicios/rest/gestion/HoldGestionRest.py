@@ -11,10 +11,10 @@ class HoldGestionRest:
     Equivalente al controlador HoldGestionController en C#.
 
     URL base:
-    http://aureacuengr.runasp.net/api/gestion/hold
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/hold"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/hold"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

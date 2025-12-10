@@ -11,7 +11,7 @@ class FacturaSoap:
     """
 
     def __init__(self):
-        self.wsdl = "http://allpahousenyc.runasp.net/EmitirFacturaHotelWS.asmx?wsdl"
+        self.wsdl = "http://soapbrisamar.runasp.net/EmitirFacturaHotelWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

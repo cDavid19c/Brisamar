@@ -10,7 +10,7 @@ class CiudadGestionSoap:
     def __init__(self):
         # WSDL PUBLICADO EN AZURE 🚀
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/CiudadService.asmx.asmx?wsdl"
+            "http://brisamargs.runasp.net/CiudadService.asmx.asmx?wsdl"
         )
 
         # Desactivar SSL (Azure usa certificado intermedio)

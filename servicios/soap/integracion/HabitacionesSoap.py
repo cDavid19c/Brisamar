@@ -12,7 +12,7 @@ class HabitacionesSoap:
     """
 
     def __init__(self):
-        self.wsdl = "http://allpahousenyc.runasp.net/buscarHabitacionesWS.asmx?wsdl"
+        self.wsdl = "http://soapbrisamar.runasp.net/buscarHabitacionesWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

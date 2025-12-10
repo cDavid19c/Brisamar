@@ -10,7 +10,7 @@ class ReservaGestionSoap:
     def __init__(self):
         # 👉 LINK DEL WSDL SOAP
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/ReservaWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/ReservaWS.asmx?wsdl"
         )
 
         session = requests.Session()

@@ -11,7 +11,7 @@ class UsuarioExternoSoap:
     """
 
     def __init__(self):
-        self.wsdl = "http://allpahousenyc.runasp.net/CrearUsuarioExternoWS.asmx?wsdl"
+        self.wsdl = "http://soapbrisamar.runasp.net/CrearUsuarioExternoWS.asmx?wsdl"
 
         session = requests.Session()
         session.verify = False

@@ -10,7 +10,7 @@ class PreReservaRest:
     Equivalente al PreReservaController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/hold"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/hold"
 
     def __init__(self):
         self.headers = {

@@ -10,7 +10,7 @@ class MetodoPagoGestionSoap:
     def __init__(self):
         # 👉 Asegúrate de reemplazar por el WSDL verdadero una vez publicado:
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/MetodoPagoWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/MetodoPagoWS.asmx?wsdl"
         )
 
         session = requests.Session()

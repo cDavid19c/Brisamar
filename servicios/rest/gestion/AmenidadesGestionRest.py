@@ -16,7 +16,7 @@ class AmenidadesGestionRest:
     Equivalente al controlador C# AmenidadesGestionController.
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/amenidades"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/amenidades"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

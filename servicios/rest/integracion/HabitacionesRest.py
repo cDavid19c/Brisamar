@@ -10,7 +10,7 @@ class HabitacionesRest:
     Equivalente al HabitacionesController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/search"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/search"
 
     def __init__(self):
         self.headers = {"Accept": "application/json"}

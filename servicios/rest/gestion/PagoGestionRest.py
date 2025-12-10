@@ -11,10 +11,10 @@ class PagoGestionRest:
     Equivalente al controlador PagoGestionController en C#.
 
     URL base:
-    http://aureacuengr.runasp.net/api/gestion/pago
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/pago"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/pago"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

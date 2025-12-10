@@ -9,7 +9,7 @@ class HoldGestionSoap:
 
     def __init__(self):
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/HoldWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/HoldWS.asmx?wsdl"
         )
 
         session = requests.Session()

@@ -9,7 +9,7 @@ class FacturaGestionSoap:
     def __init__(self):
         # WSDL PUBLICADO EN AZURE
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/FacturaWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/FacturaWS.asmx?wsdl"
         )
 
         # Desactivar validación SSL (Azure)

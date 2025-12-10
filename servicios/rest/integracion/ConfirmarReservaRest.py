@@ -8,7 +8,7 @@ class ConfirmarReservaRest:
     Equivalente a ConfirmarReservaController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/book"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/book"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

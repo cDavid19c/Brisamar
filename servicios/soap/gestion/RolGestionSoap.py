@@ -9,7 +9,7 @@ class RolGestionSoap:
     def __init__(self):
         # URL DEL WSDL
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/RolWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/RolWS.asmx?wsdl"
         )
 
         session = requests.Session()

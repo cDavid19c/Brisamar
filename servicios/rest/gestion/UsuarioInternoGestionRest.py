@@ -7,7 +7,7 @@ class UsuarioInternoGestionRest:
 
     def __init__(self):
         # URL base del servicio en Azure
-        self.base_url = "http://allphahousenycrg.runasp.net/api/gestion/usuarios-internos"
+        self.base_url = "http://brisamargr.runasp.net/api/gestion/usuarios-internos"
 
     # ================================================================
     # GET: obtener todos los usuarios internos

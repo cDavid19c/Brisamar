@@ -8,7 +8,7 @@ class FacturaRest:
     Equivalente al FacturaController en C#.
     """
 
-    BASE_URL = "http://restallpahousenyc.runasp.net/api/v1/hoteles/invoices"
+    BASE_URL = "http://restbrisamar.runasp.net/api/v1/hoteles/invoices"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

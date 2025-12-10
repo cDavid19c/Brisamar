@@ -10,7 +10,7 @@ class HotelGestionSoap:
     def __init__(self):
         # WSDL publicado en Azure
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/HotelWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/HotelWS.asmx?wsdl"
         )
 
         session = requests.Session()

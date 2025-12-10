@@ -10,7 +10,7 @@ class HabitacionGestionSoap:
     def __init__(self):
         # 🔥 WSDL de Habitaciones publicado en Azure
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/HabitacionWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/HabitacionWS.asmx?wsdl"
         )
 
         # Azure → SSL intermedio → permitir verify=False

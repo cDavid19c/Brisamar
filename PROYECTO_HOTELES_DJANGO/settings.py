@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "allpahousenyc.onrender.com",  # ← AGREGA ESTO
+    "brisamar.onrender.com",  # ← AGREGA ESTO
 ]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
@@ -37,7 +37,7 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://allpahousenyc.onrender.com",
+    "https://brisamar.onrender.com",
 ]
 
 
@@ -127,9 +127,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 # Carpeta donde collectstatic juntará todo para producción
-from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # WhiteNoise: servir estáticos en producción

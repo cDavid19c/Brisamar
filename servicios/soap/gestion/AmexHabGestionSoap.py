@@ -9,7 +9,7 @@ class AmexHabGestionSoap:
 
     def __init__(self):
         # Cambia el puerto si tu SOAP usa otro
-        self.wsdl = "http://allpahousenycgs.runasp.net/AmexHabWS.asmx?wsdl"
+        self.wsdl = "http://brisamargs.runasp.net/AmexHabWS.asmx?wsdl"
 
         # Desactivar verificación SSL porque es localhost
         session = requests.Session()

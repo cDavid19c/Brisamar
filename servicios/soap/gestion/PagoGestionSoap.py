@@ -10,7 +10,7 @@ class PagoGestionSoap:
     def __init__(self):
         # 👉 WSDL publicado de PagoWS (ajústalo si tu URL cambia)
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/PagoWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/PagoWS.asmx?wsdl"
         )
 
         # Azure → requiere desactivar verificación SSL

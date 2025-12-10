@@ -12,7 +12,7 @@ class ReservaGestionRest:
     api/gestion/reserva
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/reservas"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/reservas"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}

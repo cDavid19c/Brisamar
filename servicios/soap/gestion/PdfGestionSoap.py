@@ -10,7 +10,7 @@ class PdfGestionSoap:
     def __init__(self):
         # 👉 LINK DEL WSDL SOAP
         self.wsdl = (
-            "http://allpahousenycgs.runasp.net/PdfWS.asmx?wsdl"
+            "http://brisamargs.runasp.net/PdfWS.asmx?wsdl"
         )
 
         session = requests.Session()

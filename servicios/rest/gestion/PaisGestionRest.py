@@ -9,10 +9,10 @@ class PaisGestionRest:
     Equivalente al controlador PaisGestionController en C#.
 
     URL base:
-    http://aureacuengr.runasp.net/api/gestion/pais
+    
     """
 
-    BASE_URL = "http://allphahousenycrg.runasp.net/api/gestion/pais"
+    BASE_URL = "http://brisamargr.runasp.net/api/gestion/pais"
 
     def __init__(self):
         self.headers = {"Content-Type": "application/json"}
