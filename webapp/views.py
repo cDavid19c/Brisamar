@@ -345,6 +345,9 @@ def detalle_habitacion(request, id):
         "habitaciones": None,
         "amex_list": None,
         "amenidades_data": None,
+        "hoteles_list": None,
+        "ciudades_list": None,
+        "paises_list": None,
     }
 
     def cargar_habitaciones():
@@ -359,12 +362,30 @@ def detalle_habitacion(request, id):
     def cargar_amenidades():
         amen_rest = AmenidadesGestionRest()
         datos["amenidades_data"] = amen_rest.obtener_amenidades()
+    
+    def cargar_hoteles():
+        from servicios.rest.gestion.HotelGestionRest import HotelGestionRest
+        hoteles_rest = HotelGestionRest()
+        datos["hoteles_list"] = hoteles_rest.obtener_hoteles()
+
+    def cargar_ciudades():
+        from servicios.rest.gestion.CiudadGestionRest import CiudadGestionRest
+        ciudades_rest = CiudadGestionRest()
+        datos["ciudades_list"] = ciudades_rest.obtener_ciudades()
+    
+    def cargar_paises():
+        from servicios.rest.gestion.PaisGestionRest import PaisGestionRest
+        paises_rest = PaisGestionRest()
+        datos["paises_list"] = paises_rest.obtener_paises()
 
     # Crear threads
     threads = [
         threading.Thread(target=cargar_habitaciones),
         threading.Thread(target=cargar_amexhab),
         threading.Thread(target=cargar_amenidades),
+        threading.Thread(target=cargar_hoteles),
+        threading.Thread(target=cargar_ciudades),
+        threading.Thread(target=cargar_paises),
     ]
 
     # Ejecutar en paralelo
@@ -384,6 +405,9 @@ def detalle_habitacion(request, id):
     habitaciones = datos["habitaciones"]
     amex_list = datos["amex_list"]
     amenidades_data = datos["amenidades_data"]
+    hoteles_list = datos["hoteles_list"] or []
+    ciudades_list = datos["ciudades_list"] or []
+    paises_list = datos["paises_list"] or []
 
     # Buscar la habitación con el ID proporcionado (REST usa PascalCase)
     habitacion = next((h for h in habitaciones if h.get("IdHabitacion") == id), None)
@@ -399,6 +423,7 @@ def detalle_habitacion(request, id):
         if a.get("IdHabitacion") == id
     ]
 
+
     # Index de amenidad por ID
     amen_index = {a["IdAmenidad"]: a["NombreAmenidad"] for a in amenidades_data}
 
@@ -407,6 +432,29 @@ def detalle_habitacion(request, id):
         amen_index.get(aid, "Amenidad desconocida")
         for aid in ids_amenidades
     ]
+
+    # ==============================
+    # Crear índices para hotel, ciudad y país
+    # ==============================
+    idx_hoteles = {h["IdHotel"]: h["NombreHotel"] for h in hoteles_list}
+    idx_ciudades = {c["IdCiudad"]: c for c in ciudades_list}  # Guardar objeto completo de ciudad
+    idx_paises = {p["IdPais"]: p["NombrePais"] for p in paises_list}
+    
+    # Obtener IDs de la habitación
+    id_hotel = habitacion.get("IdHotel")
+    id_ciudad = habitacion.get("IdCiudad")
+    
+    # Obtener nombres usando los índices
+    nombre_hotel = idx_hoteles.get(id_hotel, "Hotel Brisamar")
+    
+    # Obtener ciudad (objeto completo)
+    ciudad_obj = idx_ciudades.get(id_ciudad, {})
+    nombre_ciudad = ciudad_obj.get("NombreCiudad", "San Juan")
+    
+    # Obtener país desde la ciudad
+    id_pais = ciudad_obj.get("IdPais") if ciudad_obj else None
+    nombre_pais = idx_paises.get(id_pais, "Puerto Rico") if id_pais else "Puerto Rico"
+
 
     # ==============================
     # Procesar imágenes
@@ -424,9 +472,9 @@ def detalle_habitacion(request, id):
     contexto = {
         "id": habitacion.get("IdHabitacion"),
         "nombre": habitacion.get("NombreHabitacion") or "Habitación",
-        "hotel": habitacion.get("NombreHotel") or "Hotel desconocido",
-        "ubicacion": habitacion.get("NombreCiudad") or "Ubicación no disponible",
-        "pais": habitacion.get("NombrePais") or "No disponible",
+        "hotel": nombre_hotel,
+        "ubicacion": nombre_ciudad,
+        "pais": nombre_pais,
         "tipo": habitacion.get("NombreTipoHabitacion") or "N/A",
         "capacidad": habitacion.get("CapacidadHabitacion") or 0,
         "precio": habitacion.get("PrecioActualHabitacion") or 0,
