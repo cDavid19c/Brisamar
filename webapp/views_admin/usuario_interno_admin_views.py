@@ -79,27 +79,50 @@ class UsuarioInternoCreateAjaxView(View):
         import re
         api = UsuarioInternoGestionRest()
         try:
-            # Obtener datos
+            # Obtener datos y aplicar trim automático
             nombre = request.POST.get("nombre", "").strip()
             apellido = request.POST.get("apellido", "").strip()
             correo = request.POST.get("correo", "").strip()
             tipo_doc = request.POST.get("tipo_documento", "").strip().upper()  # Normalizar a mayúsculas
             documento = request.POST.get("documento", "").strip()
             
-            # Validaciones mejoradas
+            # ========================================
+            # VALIDACIONES MEJORADAS
+            # ========================================
+            
+            # 1. Validar nombre
             if not nombre or nombre.isspace():
                 return JsonResponse({"status": "error", "message": "El nombre es obligatorio y no puede ser solo espacios"}, status=400)
             
+            # No permitir números en el nombre
+            if any(char.isdigit() for char in nombre):
+                return JsonResponse({"status": "error", "message": "El nombre no puede contener números"}, status=400)
+            
+            # Solo permitir letras y espacios en el nombre
+            if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre):
+                return JsonResponse({"status": "error", "message": "El nombre solo puede contener letras y espacios"}, status=400)
+            
+            # 2. Validar apellido
             if not apellido or apellido.isspace():
                 return JsonResponse({"status": "error", "message": "El apellido es obligatorio y no puede ser solo espacios"}, status=400)
             
+            # No permitir números en el apellido
+            if any(char.isdigit() for char in apellido):
+                return JsonResponse({"status": "error", "message": "El apellido no puede contener números"}, status=400)
+            
+            # Solo permitir letras y espacios en el apellido
+            if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', apellido):
+                return JsonResponse({"status": "error", "message": "El apellido solo puede contener letras y espacios"}, status=400)
+            
+            # 3. Validar correo
             if not correo or "@" not in correo:
-                return JsonResponse({"status": "error", "message": "El correo debe ser válido y contener @"}, status=400)
+                return JsonResponse({"status": "error", "message": "El correo es obligatorio y debe contener @"}, status=400)
             
             email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
             if not re.match(email_regex, correo):
                 return JsonResponse({"status": "error", "message": "El formato del correo no es válido"}, status=400)
             
+            # 4. Validar tipo de documento y número de documento
             # Tipo documento y documento son opcionales, pero si hay documento debe haber tipo
             if documento and not tipo_doc:
                 return JsonResponse({"status": "error", "message": "Si ingresa un documento, debe seleccionar el tipo"}, status=400)
@@ -109,7 +132,10 @@ class UsuarioInternoCreateAjaxView(View):
             
             # Validar formato según tipo documento (CEDULA, PASAPORTE en mayúsculas)
             if tipo_doc == "CEDULA":
-                if not documento.isdigit() or len(documento) != 10:
+                # Debe ser exactamente 10 dígitos numéricos
+                if not documento.isdigit():
+                    return JsonResponse({"status": "error", "message": "La cédula solo puede contener números"}, status=400)
+                if len(documento) != 10:
                     return JsonResponse({"status": "error", "message": "La cédula debe tener exactamente 10 dígitos"}, status=400)
             elif tipo_doc == "PASAPORTE":
                 if len(documento) < 5 or len(documento) > 20:
@@ -150,27 +176,50 @@ class UsuarioInternoUpdateAjaxView(View):
         api = UsuarioInternoGestionRest()
         pprint(request.POST)
         try:
-            # Obtener datos
+            # Obtener datos y aplicar trim automático
             nombre = request.POST.get("nombre", "").strip()
             apellido = request.POST.get("apellido", "").strip()
             correo = request.POST.get("correo", "").strip()
             tipo_doc = request.POST.get("tipo_documento", "").strip().upper()  # Normalizar a mayúsculas
             documento = request.POST.get("documento", "").strip()
             
-            # Validaciones mejoradas
+            # ========================================
+            # VALIDACIONES MEJORADAS
+            # ========================================
+            
+            # 1. Validar nombre
             if not nombre or nombre.isspace():
                 return JsonResponse({"status": "error", "message": "El nombre es obligatorio y no puede ser solo espacios"}, status=400)
             
+            # No permitir números en el nombre
+            if any(char.isdigit() for char in nombre):
+                return JsonResponse({"status": "error", "message": "El nombre no puede contener números"}, status=400)
+            
+            # Solo permitir letras y espacios en el nombre
+            if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre):
+                return JsonResponse({"status": "error", "message": "El nombre solo puede contener letras y espacios"}, status=400)
+            
+            # 2. Validar apellido
             if not apellido or apellido.isspace():
                 return JsonResponse({"status": "error", "message": "El apellido es obligatorio y no puede ser solo espacios"}, status=400)
             
+            # No permitir números en el apellido
+            if any(char.isdigit() for char in apellido):
+                return JsonResponse({"status": "error", "message": "El apellido no puede contener números"}, status=400)
+            
+            # Solo permitir letras y espacios en el apellido
+            if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', apellido):
+                return JsonResponse({"status": "error", "message": "El apellido solo puede contener letras y espacios"}, status=400)
+            
+            # 3. Validar correo
             if not correo or "@" not in correo:
-                return JsonResponse({"status": "error", "message": "El correo debe ser válido y contener @"}, status=400)
+                return JsonResponse({"status": "error", "message": "El correo es obligatorio y debe contener @"}, status=400)
             
             email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
             if not re.match(email_regex, correo):
                 return JsonResponse({"status": "error", "message": "El formato del correo no es válido"}, status=400)
             
+            # 4. Validar tipo de documento y número de documento
             # Tipo documento y documento son opcionales, pero si hay documento debe haber tipo
             if documento and not tipo_doc:
                 return JsonResponse({"status": "error", "message": "Si ingresa un documento, debe seleccionar el tipo"}, status=400)
@@ -180,7 +229,10 @@ class UsuarioInternoUpdateAjaxView(View):
             
             # Validar formato según tipo documento (CEDULA, PASAPORTE en mayúsculas)
             if tipo_doc == "CEDULA":
-                if not documento.isdigit() or len(documento) != 10:
+                # Debe ser exactamente 10 dígitos numéricos
+                if not documento.isdigit():
+                    return JsonResponse({"status": "error", "message": "La cédula solo puede contener números"}, status=400)
+                if len(documento) != 10:
                     return JsonResponse({"status": "error", "message": "La cédula debe tener exactamente 10 dígitos"}, status=400)
             elif tipo_doc == "PASAPORTE":
                 if len(documento) < 5 or len(documento) > 20:

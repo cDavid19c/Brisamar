@@ -137,6 +137,77 @@
             padding: 1.5rem;
         }
     }
+
+    /* ==========================================
+       OCULTAR SECCIONES NO REQUERIDAS
+       (Solo visible: Habitaciones, Usuarios, 
+       Amenidades, Ciudades, Hoteles, Métodos de Pago)
+       ========================================== */
+
+    /* Ocultar: Amenidad x Habitación (AmexHab) */
+    a[href*="amexhab"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Descuentos */
+    a[href*="descuento"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Desc x Hab x Res (DesxHabxRes) */
+    a[href*="desxhabxres"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Hab x Reserva (HabxRes) */
+    a[href*="habxres"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Hold */
+    a[href*="hold"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Imágenes de Habitaciones */
+    a[href*="imagen_habitacion"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Pagos (no Métodos de Pago) */
+    a[href*="admin/pago/"]:not(a[href*="metodo"]) {
+        display: none !important;
+    }
+
+    /* Ocultar: Países */
+    a[href*="pais"] {
+        display: none !important;
+    }
+
+    /* Ocultar: PDF */
+    a[href*="pdf"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Reservas */
+    a[href*="reservas"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Roles */
+    a[href*="/rol/"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Tipos de Habitación */
+    a[href*="tipos-habitacion"] {
+        display: none !important;
+    }
+
+    /* Ocultar: Facturas */
+    a[href*="factura"] {
+        display: none !important;
+    }
 </style>
 {% endblock %}
 

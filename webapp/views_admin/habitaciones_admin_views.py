@@ -128,6 +128,42 @@ class HabitacionesCreateAjaxView(View):
                 return JsonResponse({"status": "error", "message": f"{label} es requerido"}, status=400)
 
         try:
+            # ========================================
+            # VALIDACIÓN DE PRECIOS
+            # ========================================
+            precio_normal = request.POST.get("PrecioNormalHabitacion")
+            precio_actual = request.POST.get("PrecioActualHabitacion")
+            
+            # Validar precio normal
+            if precio_normal:
+                try:
+                    precio_normal_float = float(precio_normal)
+                    if precio_normal_float < 10:
+                        return JsonResponse({
+                            "status": "error", 
+                            "message": "El precio normal debe ser mayor o igual a 10"
+                        }, status=400)
+                except (ValueError, TypeError):
+                    return JsonResponse({
+                        "status": "error", 
+                        "message": "El precio normal debe ser un número válido"
+                    }, status=400)
+            
+            # Validar precio actual
+            if precio_actual:
+                try:
+                    precio_actual_float = float(precio_actual)
+                    if precio_actual_float < 10:
+                        return JsonResponse({
+                            "status": "error", 
+                            "message": "El precio actual debe ser mayor o igual a 10"
+                        }, status=400)
+                except (ValueError, TypeError):
+                    return JsonResponse({
+                        "status": "error", 
+                        "message": "El precio actual debe ser un número válido"
+                    }, status=400)
+            
             api = HabitacionesGestionRest()
 
             api.crear_habitacion(
@@ -136,8 +172,8 @@ class HabitacionesCreateAjaxView(View):
                 int(request.POST.get("IdCiudad")),
                 int(request.POST.get("IdHotel")),
                 request.POST.get("NombreHabitacion"),
-                request.POST.get("PrecioNormalHabitacion") or None,
-                request.POST.get("PrecioActualHabitacion") or None,
+                precio_normal or None,
+                precio_actual or None,
                 request.POST.get("CapacidadHabitacion") or None,
                 request.POST.get("EstadoHabitacion") or None,
                 request.POST.get("EstadoActivoHabitacion") == "true"
@@ -171,6 +207,42 @@ class HabitacionesUpdateAjaxView(View):
                 return JsonResponse({"status": "error", "message": f"{campo} es obligatorio"}, status=400)
 
         try:
+            # ========================================
+            # VALIDACIÓN DE PRECIOS
+            # ========================================
+            precio_normal = request.POST.get("PrecioNormalHabitacion")
+            precio_actual = request.POST.get("PrecioActualHabitacion")
+            
+            # Validar precio normal
+            if precio_normal:
+                try:
+                    precio_normal_float = float(precio_normal)
+                    if precio_normal_float < 10:
+                        return JsonResponse({
+                            "status": "error", 
+                            "message": "El precio normal debe ser mayor o igual a 10"
+                        }, status=400)
+                except (ValueError, TypeError):
+                    return JsonResponse({
+                        "status": "error", 
+                        "message": "El precio normal debe ser un número válido"
+                    }, status=400)
+            
+            # Validar precio actual
+            if precio_actual:
+                try:
+                    precio_actual_float = float(precio_actual)
+                    if precio_actual_float < 10:
+                        return JsonResponse({
+                            "status": "error", 
+                            "message": "El precio actual debe ser mayor o igual a 10"
+                        }, status=400)
+                except (ValueError, TypeError):
+                    return JsonResponse({
+                        "status": "error", 
+                        "message": "El precio actual debe ser un número válido"
+                    }, status=400)
+            
             api = HabitacionesGestionRest()
 
             estado_raw = request.POST.get("EstadoActivoHabitacion")
@@ -187,8 +259,8 @@ class HabitacionesUpdateAjaxView(View):
                 int(request.POST.get("IdCiudad")),
                 int(request.POST.get("IdHotel")),
                 request.POST.get("NombreHabitacion"),
-                request.POST.get("PrecioNormalHabitacion") or None,
-                request.POST.get("PrecioActualHabitacion") or None,
+                precio_normal or None,
+                precio_actual or None,
                 request.POST.get("CapacidadHabitacion") or None,
                 request.POST.get("EstadoHabitacion") or None,
                 estado
